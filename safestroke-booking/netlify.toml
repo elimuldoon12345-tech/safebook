@@ -1,0 +1,12 @@
+[build]
+  functions = "netlify/functions"
+
+[build.environment]
+  # Node 18+ has native fetch in Netlify Functions
+  NODE_VERSION = "18"
+
+# Expose functions under the standard path
+[[redirects]]
+  from = "/.netlify/functions/*"
+  to   = "/.netlify/functions/:splat"
+  status = 200

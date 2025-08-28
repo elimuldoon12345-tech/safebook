@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SafeStroke — Book a Class</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .fade-in { animation: fadeIn .25s ease-in }
+    @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <main class="max-w-3xl mx-auto p-4 sm:p-6">
+    <header class="text-center mb-6">
+      <h1 class="text-3xl font-bold text-slate-800">Choose a Class</h1>
+      <p class="text-slate-600 mt-1">Live availability powered by Acuity</p>
+    </header>
+
+    <section id="classes" class="grid gap-4">
+      <!-- Cards -->
+      <article class="bg-white border rounded-xl p-5 shadow-sm">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-semibold text-slate-800">Droplet (Parent & Child, 3–24 months)</h2>
+            <p class="text-slate-600">30 minutes @ $40.00</p>
+          </div>
+          <button class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+                  onclick="loadTimes('droplet')">See times</button>
+        </div>
+        <div id="times-droplet" class="mt-4 hidden"></div>
+      </article>
+
+      <article class="bg-white border rounded-xl p-5 shadow-sm">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-semibold text-slate-800">Splashlet (2–3 years)</h2>
+            <p class="text-slate-600">30 minutes @ $40.00</p>
+          </div>
+          <button class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+                  onclick="loadTimes('splashlet')">See times</button>
+        </div>
+        <div id="times-splashlet" class="mt-4 hidden"></div>
+      </article>
+
+      <article class="bg-white border rounded-xl p-5 shadow-sm">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <h2 class="text-xl font-semibold text-slate-800">Strokelet (3+ years)</h2>
+            <p class="text-slate-600">30 minutes @ $45.00</p>
+          </div>
+          <button class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700"
+                  onclick="loadTimes('strokelet')">See times</button>
+        </div>
+        <div id="times-strokelet" class="mt-4 hidden"></div>
+      </article>
+    </section>
+  </main>
+
+  <!-- Booking Modal -->
+  <dialog id="bookDialog" class="rounded-2xl w-11/12 max-w-md p-0">
+    <form id="bookForm" class="bg-white p-6 rounded-2xl">
+      <h3 class="text-xl font-semibold text-slate-800 mb-4">Book this time</h3>
+      <input type="hidden" id="bf-appointmentTypeID" />
+      <input type="hidden" id="bf-datetime" />
+
+      <div class="grid gap-3">
+        <input id="bf-firstName" class="border rounded-lg p-2" placeholder="First name" required />
+        <input id="bf-lastName" class="border rounded-lg p-2" placeholder="Last name" required />
+        <input id="bf-email" type="email" class="border rounded-lg p-2" placeholder="Email" required />
+        <input id="bf-phone" class="border rounded-lg p-2" placeholder="Phone (optional)" />
+        <textarea id="bf-notes" class="border rounded-lg p-2" placeholder="Notes (optional)"></textarea>
+      </div>
+
+      <div class="flex items-center justify-end gap-2 mt-4">
+        <button type="button" class="px-3 py-2 rounded-lg border" onclick="closeDialog()">Cancel</button>
+        <button class="px-4 py-2 rounded-lg bg-blue-600 text-white">Book</button>
+      </div>
+      <p id="bf-status" class="text-sm text-slate-600 mt-3"></p>
+    </form>
+  </dialog>
+
+  <script>
+    // Map your appointment types
+    const appointmentTypes = {
+      droplet:   "81908979",
+      splashlet: "81908997",
+      strokelet: "81909020",
+    };
+
+    async function loadTimes(key) {
+      const typeId = appointmentTypes[key];
+      const el = document.getElementById(`times-${key}`);
+      el.classList.remove("hidden");
+      el.innerHTML = `<div class="text-slate-600">Loading…</div>`;
+
+      try {
+        const res = await fetch(`/.netlify/functions/get-availability?appointmentTypeId=${encodeURIComponent(typeId)}`);
+        if (!res.ok) throw new Error(`${res.status}`);
+        const data = await res.json(); // array of objects with .time (ISO)
+        if (!Array.isArray(data) || data.length === 0) {
+          el.innerHTML = `<div class="text-slate-600">No times found. Please check back soon.</div>`;
+          return;
+        }
+
+        el.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            ${data.map(t => timeButton(key, typeId, t.time)).join("")}
+          </div>`;
+      } catch (e) {
+        console.error(e);
+        el.innerHTML = `<div class="text-red-600">Unable to load times.</div>`;
+      }
+    }
+
+    function timeButton(key, typeId, iso) {
+      const d = new Date(iso);
+      const nice = d.toLocaleString([], { weekday: "short", month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
+      return `
+        <button class="w-full border rounded-lg px-3 py-2 text-left hover:bg-blue-50"
+                onclick="openDialog('${typeId}','${iso}')" type="button">
+          ${nice}
+        </button>`;
+    }
+
+    function openDialog(appointmentTypeID, datetime) {
+      document.getElementById("bf-appointmentTypeID").value = appointmentTypeID;
+      document.getElementById("bf-datetime").value = datetime;
+      document.getElementById("bf-status").textContent = "";
+      document.getElementById("bookDialog").showModal();
+    }
+    function closeDialog() {
+      document.getElementById("bookDialog").close();
+    }
+
+    document.getElementById("bookForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const status = document.getElementById("bf-status");
+      status.textContent = "Booking…";
+
+      const payload = {
+        appointmentTypeID: document.getElementById("bf-appointmentTypeID").value,
+        datetime:          document.getElementById("bf-datetime").value,
+        firstName:         document.getElementById("bf-firstName").value.trim(),
+        lastName:          document.getElementById("bf-lastName").value.trim(),
+        email:             document.getElementById("bf-email").value.trim(),
+        phone:             document.getElementById("bf-phone").value.trim(),
+        notes:             document.getElementById("bf-notes").value.trim(),
+      };
+
+      try {
+        const res = await fetch("/.netlify/functions/book-appointment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.message || "Booking failed");
+
+        status.textContent = "Booked! Check your email for confirmation.";
+        setTimeout(closeDialog, 1200);
+      } catch (err) {
+        console.error(err);
+        status.textContent = "Booking failed. Please try again.";
+      }
+    });
+  </script>
+</body>
+</html>
