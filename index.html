@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeStroke - Book a Swimming Class</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <div class="max-w-6xl mx-auto px-4 py-12">
+        <!-- Header -->
+        <div class="text-center mb-16">
+            <h1 class="text-6xl font-bold text-white mb-6 drop-shadow-lg">
+                SafeStroke Swimming
+            </h1>
+            <p class="text-xl text-blue-100 max-w-2xl mx-auto">
+                Professional swim lessons in a safe, fun environment. Book your class today and dive into confidence!
+            </p>
+        </div>
+
+        <!-- Classes Grid -->
+        <div class="grid md:grid-cols-3 gap-8 mb-16">
+            <!-- Droplet Class -->
+            <div class="bg-white rounded-3xl shadow-2xl p-8 card-hover transition-all duration-300">
+                <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mb-6 mx-auto">
+                    <svg class="w-10 h-10 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 2C10 2 6 6 6 10c0 2.21 1.79 4 4 4s4-1.79 4-4c0-4-4-8-4-8z"/>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-3 text-center">Droplet</h3>
+                <p class="text-gray-600 mb-4 text-center">Parent & Child (3-24 months)</p>
+                <p class="text-center mb-6">
+                    <span class="text-3xl font-bold text-blue-600">$40</span>
+                    <span class="text-gray-500"> / 30 minutes</span>
+                </p>
+                <button onclick="bookClass('81908979', 'Droplet')" 
+                        class="w-full bg-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:bg-blue-700 transition duration-200 transform hover:scale-105">
+                    Book Now
+                </button>
+            </div>
+
+            <!-- Splashlet Class -->
+            <div class="bg-white rounded-3xl shadow-2xl p-8 card-hover transition-all duration-300">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6 mx-auto">
+                    <svg class="w-10 h-10 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-3 text-center">Splashlet</h3>
+                <p class="text-gray-600 mb-4 text-center">Ages 2-3 years</p>
+                <p class="text-center mb-6">
+                    <span class="text-3xl font-bold text-green-600">$40</span>
+                    <span class="text-gray-500"> / 30 minutes</span>
+                </p>
+                <button onclick="bookClass('81908997', 'Splashlet')" 
+                        class="w-full bg-green-600 text-white py-4 px-6 rounded-xl font-semibold hover:bg-green-700 transition duration-200 transform hover:scale-105">
+                    Book Now
+                </button>
+            </div>
+
+            <!-- Strokelet Class -->
+            <div class="bg-white rounded-3xl shadow-2xl p-8 card-hover transition-all duration-300">
+                <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mb-6 mx-auto">
+                    <svg class="w-10 h-10 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-3 text-center">Strokelet</h3>
+                <p class="text-gray-600 mb-4 text-center">Ages 3+ years</p>
+                <p class="text-center mb-6">
+                    <span class="text-3xl font-bold text-purple-600">$45</span>
+                    <span class="text-gray-500"> / 30 minutes</span>
+                </p>
+                <button onclick="bookClass('81909020', 'Strokelet')" 
+                        class="w-full bg-purple-600 text-white py-4 px-6 rounded-xl font-semibold hover:bg-purple-700 transition duration-200 transform hover:scale-105">
+                    Book Now
+                </button>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="bg-white/10 backdrop-blur rounded-3xl p-8 mb-16">
+            <h2 class="text-3xl font-bold text-white text-center mb-8">Why Choose SafeStroke?</h2>
+            <div class="grid md:grid-cols-3 gap-6 text-white">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Certified Instructors</h3>
+                    <p class="text-blue-100">Professional, experienced swim instructors</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Safe Environment</h3>
+                    <p class="text-blue-100">Clean, heated pools with safety protocols</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mb-4 mx-auto">
+                        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Small Classes</h3>
+                    <p class="text-blue-100">Personalized attention for every student</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="text-center text-white/80">
+            <p>Questions? Contact us at info@safestroke.com</p>
+        </div>
+    </div>
+
+    <script>
+        function bookClass(appointmentTypeId, className) {
+            // Option 1: Direct link to your Squarespace booking page with appointment type
+            const bookingUrl = `https://finch-grouper-2gam.squarespace.com/scheduling?appointmentType=${appointmentTypeId}`;
+            
+            // Option 2: If you want a popup/modal experience, uncomment this:
+            // window.open(bookingUrl, 'booking', 'width=800,height=600,scrollbars=yes');
+            
+            // Option 3: Direct navigation (current)
+            window.open(bookingUrl, '_blank');
+        }
+
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate cards on scroll
+            const cards = document.querySelectorAll('.card-hover');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }, index * 100);
+                    }
+                });
+            });
+
+            cards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'all 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
